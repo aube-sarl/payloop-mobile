@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, View } from "react-native";
 export default function AmountInput() {
   return (
     <View style={styles.container}>
-      <TextInput />
+      <TextInput style={styles.textInput} inputMode="decimal" />
     </View>
   );
 }
@@ -14,5 +14,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 5,
   },
-  textInput: { fontSize: 48 },
+  textInput: {
+    fontSize: 48,
+    fontFamily: "ClashDisplayMedium",
+    backgroundColor: "yellow",
+    width: "100%",
+    paddingHorizontal: 10,
+  },
 });
