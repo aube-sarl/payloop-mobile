@@ -8,6 +8,15 @@ export type ThemedTextProps = TextProps & {
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
 };
 
+/**
+ * ThemedText component that inherits the global default font family (ClashDisplay).
+ * 
+ * Font behavior:
+ * - Inherits global default font family set in app/_layout.tsx
+ * - Supports fontFamily override via style prop
+ * - Maintains type-based styling (fontSize, fontWeight, lineHeight)
+ */
+
 export function ThemedText({
   style,
   lightColor,
@@ -26,7 +35,7 @@ export function ThemedText({
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'link' ? styles.link : undefined,
-        style,
+        style, // Custom styles (including fontFamily) override defaults
       ]}
       {...rest}
     />

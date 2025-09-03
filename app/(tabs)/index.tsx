@@ -21,6 +21,21 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">🎨 ClashDisplay Font Demo</ThemedText>
+        <ThemedText>
+          This text is now using the ClashDisplay font family! You should notice a difference in the typography compared to the default system font.
+        </ThemedText>
+        <ThemedText type="defaultSemiBold">
+          ClashDisplay Bold Text - Perfect for headings and emphasis
+        </ThemedText>
+        <ThemedText style={{ fontSize: 24, textAlign: 'center', marginVertical: 10 }}>
+          ClashDisplay Large Text
+        </ThemedText>
+      </ThemedView>
+      <ThemedView>
+        {/* <FontDemo /> */}
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
