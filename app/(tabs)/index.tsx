@@ -7,6 +7,7 @@ import {
 } from "@/assets/icons/_icons";
 import CurrencyButton from "@/components/buttons/currency-button";
 import HomeActionButton from "@/components/buttons/home-action-button";
+import SendMoneyForm from "@/components/forms/send-money-form";
 import Entypo from "@expo/vector-icons/Entypo";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -70,30 +71,12 @@ export default function HomeScreen() {
           <HomeActionButton text="Deposer" />
           <HomeActionButton text="Deposer" />
         </View>
+
+        <SendMoneyForm />
         <View>
           <Text style={{ fontFamily: "ClashDisplayMedium", fontSize: 24 }}>
             Mes cartes
           </Text>
-          <View
-            style={{
-              height: 200,
-              backgroundColor: "lightgray",
-              borderRadius: 20,
-              marginTop: 10,
-              marginHorizontal: 10,
-            }}
-          >
-            {/* Card component */}
-          </View>
-          <View
-            style={{
-              height: 200,
-              backgroundColor: "lightgray",
-              borderRadius: 20,
-              marginTop: 10,
-              marginHorizontal: 10,
-            }}
-          ></View>
         </View>
       </ScrollView>
     </SafeAreaView>
