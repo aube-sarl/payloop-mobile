@@ -1,3 +1,4 @@
+import ScreenDimensions from "@/constants/screen-dimensions";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -23,9 +24,8 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 20,
-    marginTop: 20,
     flexDirection: "row",
     gap: 8,
+    width: (ScreenDimensions.width - 30) / 2,
   },
 });

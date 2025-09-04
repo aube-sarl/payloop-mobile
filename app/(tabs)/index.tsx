@@ -8,6 +8,7 @@ import {
 import CurrencyButton from "@/components/buttons/currency-button";
 import HomeActionButton from "@/components/buttons/home-action-button";
 import SendMoneyForm from "@/components/forms/send-money-form";
+import ScreenDimensions from "@/constants/screen-dimensions";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
@@ -68,21 +69,41 @@ export default function HomeScreen() {
           <Entypo name="eye" size={24} color="black" />
         </View>
         <View>
-          <HomeActionButton
-            text="Deposer"
-            icon={<AntDesign name="pluscircleo" size={24} color="black" />}
-          />
-          <HomeActionButton
-            text="Retirer"
-            icon={<Feather name="arrow-up-circle" size={24} color="black" />}
-          />
-          <HomeActionButton text="Deposer" />
-          <HomeActionButton
-            text="Envoyer"
-            icon={<Feather name="send" size={24} color="black" />}
-          />
-        </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: ScreenDimensions.width - 20,
+              marginTop: 10,
+              marginLeft: 10,
+            }}
+          >
+            <HomeActionButton
+              text="Deposer"
+              icon={<AntDesign name="pluscircleo" size={24} color="black" />}
+            />
+            <HomeActionButton
+              text="Retirer"
+              icon={<Feather name="arrow-up-circle" size={24} color="black" />}
+            />
+          </View>
 
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: ScreenDimensions.width - 20,
+              marginTop: 10,
+              marginLeft: 10,
+            }}
+          >
+            <HomeActionButton text="Deposer" />
+            <HomeActionButton
+              text="Envoyer"
+              icon={<Feather name="send" size={24} color="black" />}
+            />
+          </View>
+        </View>
         <SendMoneyForm />
         <View>
           <Text style={{ fontFamily: "ClashDisplayMedium", fontSize: 24 }}>
