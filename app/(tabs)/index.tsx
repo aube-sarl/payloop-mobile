@@ -113,20 +113,12 @@ export default function HomeScreen() {
             <HomeActionButton
               text="Retirer"
               onPress={() => { }}
-              icon={<Feather name="arrow-up-circle" size={24} color={Colors.primary.red} />}
+              icon={<Feather name="arrow-up-circle" size={24} color={Colors.light.icon} />}
             />
-          </View>
-
-          <View style={styles.actionRow}>
             <HomeActionButton
               text="Convertir"
               onPress={() => { }}
               icon={<AntDesign name="swap" size={24} color={Colors.primary.red} />}
-            />
-            <HomeActionButton
-              text="Envoyer"
-              onPress={() => { }}
-              icon={<Feather name="send" size={24} color={Colors.primary.red} />}
             />
           </View>
         </View>
@@ -222,9 +214,8 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   actionRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 16,
+    backgroundColor: "yellow",
+    flexDirection: "row"
   },
   cardsSection: {
     paddingHorizontal: 4,
