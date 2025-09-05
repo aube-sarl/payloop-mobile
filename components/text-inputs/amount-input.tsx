@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
+import { formatAmountInput } from "@/utils/validation";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -17,16 +18,24 @@ export default function AmountInput(props: {
   value?: string;
   onChangeText?: (text: string) => void;
   placeholder?: string;
+  hasError?: boolean;
 }) {
   const [amount, setAmount] = useState(props.value || "");
 
+  // Update local state when props.value changes
+  useEffect(() => {
+    setAmount(props.value || "");
+  }, [props.value]);
+
   const handleAmountChange = (text: string) => {
-    setAmount(text);
-    props.onChangeText?.(text);
+    // Format the input to ensure proper decimal formatting
+    const formattedText = formatAmountInput(text);
+    setAmount(formattedText);
+    props.onChangeText?.(formattedText);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.hasError && styles.errorContainer]}>
       <TextInput
         style={styles.textInput}
         inputMode="decimal"
@@ -34,6 +43,8 @@ export default function AmountInput(props: {
         placeholderTextColor={Colors.text.light}
         value={amount}
         onChangeText={handleAmountChange}
+        keyboardType="decimal-pad"
+        returnKeyType="done"
       />
       <TouchableOpacity
         style={styles.currencyButton}
@@ -61,6 +72,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderRadius: 16,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: Colors.border.light
+  },
+  errorContainer: {
+    borderColor: Colors.primary.red,
+    borderWidth: 2,
   },
   textInput: {
     fontSize: 24,

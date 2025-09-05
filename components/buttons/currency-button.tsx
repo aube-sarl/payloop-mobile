@@ -20,10 +20,7 @@ export default function CurrencyButton(props: {
       ]}
       onPress={props.onPress}
     >
-      <Image
-        source={props.icon}
-        style={styles.icon}
-      />
+      <Image source={props.icon} style={styles.icon} />
       <Text
         style={[
           styles.text,
@@ -40,12 +37,12 @@ export default function CurrencyButton(props: {
 
 const styles = StyleSheet.create({
   container: {
-    height: 44,
-    paddingHorizontal: 16,
-    borderRadius: 12,
+    height: 36,
+    paddingHorizontal: 12,
+    borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 10,
+    marginRight: 8,
   },
   icon: {
     width: 24,
@@ -55,6 +52,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "ClashDisplayMedium",
-    fontSize: 16,
+    fontSize: 14,
   },
 });

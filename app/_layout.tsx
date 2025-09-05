@@ -37,6 +37,10 @@ export default function RootLayout() {
           <Stack.Screen name="onboarding-two" options={{ headerShown: false }} />
           <Stack.Screen name="onboarding-three" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="deposit" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="withdraw" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="exchange" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="send-money" options={{ presentation: 'modal', headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

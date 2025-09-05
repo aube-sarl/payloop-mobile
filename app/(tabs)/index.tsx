@@ -12,14 +12,38 @@ import SendMoneyForm from "@/components/forms/send-money-form";
 import { Colors } from "@/constants/Colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
-import Feather from "@expo/vector-icons/Feather";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
+  const router = useRouter();
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [balanceVisible, setBalanceVisible] = useState(true);
+
+  // Navigation handler functions
+  const handleDeposit = () => {
+    router.push("/deposit");
+  };
+
+  const handleWithdraw = () => {
+    router.push("/withdraw");
+  };
+
+  const handleExchange = () => {
+    router.push("/exchange");
+  };
+
+  const handleSendMoney = () => {
+    router.push("/send-money");
+  };
 
   const currencies = [
     { currency: "USD", icon: usFlag },
@@ -31,12 +55,18 @@ export default function HomeScreen() {
 
   const getBalance = () => {
     switch (selectedCurrency) {
-      case "USD": return "$1,500.44";
-      case "CDF": return "3,000,880 CDF";
-      case "RWF": return "1,200,000 RWF";
-      case "KSH": return "195,000 KSH";
-      case "UGX": return "5,500,000 UGX";
-      default: return "$1,500.44";
+      case "USD":
+        return "$1,500.44";
+      case "CDF":
+        return "3,000,880 CDF";
+      case "RWF":
+        return "1,200,000 RWF";
+      case "KSH":
+        return "195,000 KSH";
+      case "UGX":
+        return "5,500,000 UGX";
+      default:
+        return "$1,500.44";
     }
   };
 
@@ -79,11 +109,15 @@ export default function HomeScreen() {
         {/* Balance Section */}
         <View style={styles.balanceSection}>
           <Text style={styles.balanceLabel}>
-            {selectedCurrency === "USD" ? "US Dollars" :
-              selectedCurrency === "CDF" ? "Francs Congolais" :
-                selectedCurrency === "RWF" ? "Francs Rwandais" :
-                  selectedCurrency === "KSH" ? "Shillings Kenyans" :
-                    "Shillings Ougandais"}
+            {selectedCurrency === "USD"
+              ? "US Dollars"
+              : selectedCurrency === "CDF"
+                ? "Francs Congolais"
+                : selectedCurrency === "RWF"
+                  ? "Francs Rwandais"
+                  : selectedCurrency === "KSH"
+                    ? "Shillings Kenyans"
+                    : "Shillings Ougandais"}
           </Text>
           <View style={styles.balanceRow}>
             <Text style={styles.balance}>
@@ -107,18 +141,23 @@ export default function HomeScreen() {
           <View style={styles.actionRow}>
             <HomeActionButton
               text="Déposer"
-              onPress={() => { }}
-              icon={<AntDesign name="pluscircleo" size={24} color={Colors.primary.red} />}
+              onPress={handleDeposit}
+              icon={<AntDesign name="plus" size={24} color="white" />}
             />
             <HomeActionButton
               text="Retirer"
-              onPress={() => { }}
-              icon={<Feather name="arrow-up-circle" size={24} color={Colors.light.icon} />}
+              onPress={handleWithdraw}
+              icon={<AntDesign name="arrowup" size={24} color="white" />}
             />
             <HomeActionButton
-              text="Convertir"
-              onPress={() => { }}
-              icon={<AntDesign name="swap" size={24} color={Colors.primary.red} />}
+              text="Echanger"
+              onPress={handleExchange}
+              icon={<AntDesign name="swap" size={24} color={"white"} />}
+            />
+            <HomeActionButton
+              text="Envoyer"
+              onPress={handleSendMoney}
+              icon={<AntDesign name="arrowup" size={24} color={"white"} />}
             />
           </View>
         </View>
@@ -210,12 +249,12 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   actionsSection: {
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: 36,
   },
   actionRow: {
-    backgroundColor: "yellow",
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10
   },
   cardsSection: {
     paddingHorizontal: 4,

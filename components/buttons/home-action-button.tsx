@@ -9,9 +9,7 @@ export default function HomeActionButton(props: {
 }) {
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
-      <View style={styles.iconContainer}>
-        {props.icon}
-      </View>
+      <View style={styles.iconContainer}>{props.icon}</View>
       <Text style={styles.text}>{props.text}</Text>
     </TouchableOpacity>
   );
@@ -19,11 +17,9 @@ export default function HomeActionButton(props: {
 
 const styles = StyleSheet.create({
   container: {
-    height: 120,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
-    gap: 12,
   },
   iconContainer: {
     height: 48,
@@ -44,7 +40,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: "ClashDisplayMedium",
     fontSize: 14,
-    color: Colors.text.white,
+    color: Colors.text.primary,
     textAlign: "center",
   },
 });
