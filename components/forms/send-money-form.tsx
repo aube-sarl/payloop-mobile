@@ -1,3 +1,4 @@
+import { congoFlag, usFlag } from "@/assets/icons/_icons";
 import ScreenDimensions from "@/constants/screen-dimensions";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,8 +9,8 @@ export default function SendMoneyForm() {
   return (
     <View style={styles.container}>
       <Text>Send Money</Text>
-      <AmountInput />
-      <AmountInput />
+      <AmountInput currency="USD" icon={usFlag} />
+      <AmountInput currency="CDF" icon={congoFlag} />
       <RoundedButton text="Envoyer" />
     </View>
   );

@@ -1,8 +1,9 @@
-import { congoFlag } from "@/assets/icons/_icons";
+import ScreenDimensions from "@/constants/screen-dimensions";
 import React from "react";
 import {
   Image,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -13,9 +14,23 @@ export default function AmountInput(props: { icon: any; currency: string }) {
     <View style={styles.container}>
       <TextInput style={styles.textInput} inputMode="decimal" />
       <TouchableOpacity
-        style={{ backgroundColor: "white", borderLeftWidth: 1 }}
+        style={{
+          backgroundColor: "white",
+          borderLeftWidth: 1,
+          borderLeftColor: "#E5E5E5",
+          paddingLeft: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+        }}
       >
-        <Image source={congoFlag} style={{ height: 30, width: 30 }} />
+        <Image
+          source={props.icon}
+          style={{ height: 25, width: 25, marginRight: 10 }}
+        />
+        <Text style={{ fontFamily: "ClashDisplayMedium", fontSize: 20 }}>
+          {props.currency}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -32,8 +47,7 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 30,
     fontFamily: "ClashDisplayMedium",
-    width: "100%",
+    width: ScreenDimensions.width - 160,
     paddingHorizontal: 10,
-    backgroundColor: "red",
   },
 });
