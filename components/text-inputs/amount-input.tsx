@@ -1,5 +1,6 @@
-import ScreenDimensions from "@/constants/screen-dimensions";
-import React from "react";
+import { Colors } from "@/constants/Colors";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import React, { useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -9,28 +10,45 @@ import {
   View,
 } from "react-native";
 
-export default function AmountInput(props: { icon: any; currency: string }) {
+export default function AmountInput(props: {
+  icon: any;
+  currency: string;
+  onCurrencyPress?: () => void;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  placeholder?: string;
+}) {
+  const [amount, setAmount] = useState(props.value || "");
+
+  const handleAmountChange = (text: string) => {
+    setAmount(text);
+    props.onChangeText?.(text);
+  };
+
   return (
     <View style={styles.container}>
-      <TextInput style={styles.textInput} inputMode="decimal" />
+      <TextInput
+        style={styles.textInput}
+        inputMode="decimal"
+        placeholder={props.placeholder || "0.00"}
+        placeholderTextColor={Colors.text.light}
+        value={amount}
+        onChangeText={handleAmountChange}
+      />
       <TouchableOpacity
-        style={{
-          backgroundColor: "white",
-          borderLeftWidth: 1,
-          borderLeftColor: "#E5E5E5",
-          paddingLeft: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
+        style={styles.currencyButton}
+        onPress={props.onCurrencyPress}
       >
-        <Image
-          source={props.icon}
-          style={{ height: 25, width: 25, marginRight: 10 }}
-        />
-        <Text style={{ fontFamily: "ClashDisplayMedium", fontSize: 20 }}>
-          {props.currency}
-        </Text>
+        <Image source={props.icon} style={styles.currencyIcon} />
+        <Text style={styles.currencyText}>{props.currency}</Text>
+        {props.onCurrencyPress && (
+          <AntDesign
+            name="down"
+            size={12}
+            color={Colors.text.secondary}
+            style={styles.dropdownIcon}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -39,15 +57,40 @@ export default function AmountInput(props: { icon: any; currency: string }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    padding: 5,
-    backgroundColor: "white",
-    marginBottom: 10,
-    borderRadius: 14,
+    backgroundColor: Colors.background.primary,
+    marginBottom: 16,
+    borderRadius: 16,
+    overflow: "hidden",
   },
   textInput: {
-    fontSize: 30,
+    fontSize: 24,
+    fontFamily: "ClashDisplaySemibold",
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    color: Colors.text.primary,
+  },
+  currencyButton: {
+    backgroundColor: Colors.background.tertiary,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    minWidth: 120,
+  },
+  currencyIcon: {
+    height: 24,
+    width: 24,
+    marginRight: 8,
+    borderRadius: 12,
+  },
+  currencyText: {
     fontFamily: "ClashDisplayMedium",
-    width: ScreenDimensions.width - 160,
-    paddingHorizontal: 10,
+    fontSize: 16,
+    color: Colors.text.primary,
+  },
+  dropdownIcon: {
+    marginLeft: 8,
   },
 });

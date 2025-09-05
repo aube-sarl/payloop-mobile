@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -11,20 +12,25 @@ export default function CurrencyButton(props: {
     <TouchableOpacity
       style={[
         styles.container,
-        { backgroundColor: props.selected ? "black" : "#F5F5F5" },
+        {
+          backgroundColor: props.selected
+            ? Colors.primary.red
+            : Colors.background.cardElevated,
+        },
       ]}
       onPress={props.onPress}
     >
       <Image
         source={props.icon}
-        style={{ width: 24, height: 24, borderRadius: 12, marginRight: 8 }}
+        style={styles.icon}
       />
       <Text
-        style={{
-          fontFamily: "ClashDisplayMedium",
-          fontSize: 16,
-          color: props.selected ? "white" : "gray",
-        }}
+        style={[
+          styles.text,
+          {
+            color: props.selected ? Colors.text.white : Colors.text.secondary,
+          },
+        ]}
       >
         {props.currency}
       </Text>
@@ -34,12 +40,21 @@ export default function CurrencyButton(props: {
 
 const styles = StyleSheet.create({
   container: {
-    height: 40,
-    width: 80,
-    borderRadius: 15,
+    height: 44,
+    paddingHorizontal: 16,
+    borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     marginRight: 10,
-    paddingHorizontal: 5,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginRight: 8,
+  },
+  text: {
+    fontFamily: "ClashDisplayMedium",
+    fontSize: 16,
   },
 });

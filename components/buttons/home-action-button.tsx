@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import ScreenDimensions from "@/constants/screen-dimensions";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
@@ -8,24 +9,27 @@ export default function HomeActionButton(props: {
   icon: React.ReactNode;
 }) {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
       {props.icon}
-      <Text style={{ fontFamily: "ClashDisplayMedium", fontSize: 18 }}>
-        {props.text}
-      </Text>
+      <Text style={styles.text}>{props.text}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    height: 60,
-    borderRadius: 20,
-    backgroundColor: "yellow",
+    height: 64,
+    borderRadius: 16,
+    backgroundColor: Colors.background.cardElevated,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    gap: 8,
-    width: (ScreenDimensions.width - 30) / 2,
+    gap: 12,
+    width: (ScreenDimensions.width - 48) / 2,
+  },
+  text: {
+    fontFamily: "ClashDisplayMedium",
+    fontSize: 16,
+    color: Colors.text.primary,
   },
 });
