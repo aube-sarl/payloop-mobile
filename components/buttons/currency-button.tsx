@@ -11,7 +11,7 @@ export default function CurrencyButton(props: {
     <TouchableOpacity
       style={[
         styles.container,
-        { backgroundColor: props.selected ? "black" : "white" },
+        { backgroundColor: props.selected ? "black" : "#F5F5F5" },
       ]}
       onPress={props.onPress}
     >

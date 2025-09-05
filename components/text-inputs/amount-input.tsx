@@ -13,12 +13,15 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     padding: 5,
+    backgroundColor: "white",
+    marginBottom: 10,
+    borderRadius: 14,
   },
   textInput: {
-    fontSize: 48,
+    fontSize: 30,
     fontFamily: "ClashDisplayMedium",
-    backgroundColor: "yellow",
     width: "100%",
     paddingHorizontal: 10,
+    backgroundColor: "red",
   },
 });

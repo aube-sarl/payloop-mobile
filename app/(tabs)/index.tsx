@@ -26,7 +26,7 @@ export default function HomeScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <ScrollView>
         <View style={{ height: 60, flexDirection: "row", padding: 10 }}>
           <View
@@ -97,7 +97,10 @@ export default function HomeScreen() {
               marginLeft: 10,
             }}
           >
-            <HomeActionButton text="Deposer" />
+            <HomeActionButton
+              text="Convertir"
+              icon={<AntDesign name="swap" size={24} color="black" />}
+            />
             <HomeActionButton
               text="Envoyer"
               icon={<Feather name="send" size={24} color="black" />}
@@ -107,7 +110,7 @@ export default function HomeScreen() {
         <SendMoneyForm />
         <View>
           <Text style={{ fontFamily: "ClashDisplayMedium", fontSize: 24 }}>
-            Mes cartes
+            Mes cartes\
           </Text>
         </View>
       </ScrollView>
