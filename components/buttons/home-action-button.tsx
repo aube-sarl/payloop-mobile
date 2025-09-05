@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import ScreenDimensions from "@/constants/screen-dimensions";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeActionButton(props: {
   text: string;
@@ -10,7 +10,16 @@ export default function HomeActionButton(props: {
 }) {
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
-      {props.icon}
+      <View style={{
+        height: 60, width: 60,
+        backgroundColor: Colors.primary.red,
+        borderRadius: 30,
+        alignItems: "center",
+        justifyContent: "center"
+
+      }}>
+        {props.icon}
+      </View>
       <Text style={styles.text}>{props.text}</Text>
     </TouchableOpacity>
   );
@@ -19,11 +28,8 @@ export default function HomeActionButton(props: {
 const styles = StyleSheet.create({
   container: {
     height: 64,
-    borderRadius: 16,
-    backgroundColor: Colors.background.cardElevated,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
     gap: 12,
     width: (ScreenDimensions.width - 48) / 2,
   },
