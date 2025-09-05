@@ -76,7 +76,7 @@
 
 -
 
-- [ ] 10. Write integration tests for navigation flow
+- [x] 10. Write integration tests for navigation flow
 
   - Test navigation from home screen to each modal screen
   - Test modal dismissal and return to home screen
