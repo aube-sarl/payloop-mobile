@@ -4,7 +4,7 @@ import ScreenDimensions from "@/constants/screen-dimensions";
 import { validateAmount, validateCurrency, validateReceiver } from "@/utils/validation";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import BottomSheet from "@gorhom/bottom-sheet";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CurrencyBottomSheet from "../bottom-sheets/currency-bottom-sheet";
 import ReceiverBottomSheet from "../bottom-sheets/receiver-bottom-sheet";
@@ -15,38 +15,180 @@ import AmountInput from "../text-inputs/amount-input";
 interface SendMoneyFormProps {
   onComplete?: () => void;
   onCancel?: () => void;
+  currencyBottomSheetRef?: React.RefObject<BottomSheet | null>;
+  receiverBottomSheetRef?: React.RefObject<BottomSheet | null>;
+  externalCurrency?: string;
+  externalCurrencyIcon?: any;
+  externalReceiver?: { name: string; phone: string; } | undefined;
+  onCurrencyChange?: (currency: string, icon: any) => void;
+  onReceiverChange?: (receiver: { name: string; phone: string; }) => void;
+  destinationCurrencyBottomSheetRef?: React.RefObject<BottomSheet | null>;
+  externalDestinationCurrency?: string;
+  externalDestinationCurrencyIcon?: any;
+  onDestinationCurrencyChange?: (currency: string, icon: any) => void;
 }
 
-export default function SendMoneyForm({ onComplete, onCancel }: SendMoneyFormProps = {}) {
-  const currencyBottomSheetRef = useRef<BottomSheet>(null);
-  const receiverBottomSheetRef = useRef<BottomSheet>(null);
+export default function SendMoneyForm({
+  onComplete,
+  onCancel,
+  currencyBottomSheetRef,
+  receiverBottomSheetRef,
+  externalCurrency,
+  externalCurrencyIcon,
+  externalReceiver,
+  onCurrencyChange,
+  onReceiverChange,
+  destinationCurrencyBottomSheetRef,
+  externalDestinationCurrency,
+  externalDestinationCurrencyIcon,
+  onDestinationCurrencyChange
+}: SendMoneyFormProps = {}) {
+  // Use provided refs or create local ones as fallback
+  const localCurrencyRef = useRef<BottomSheet>(null);
+  const localReceiverRef = useRef<BottomSheet>(null);
+  const localDestinationCurrencyRef = useRef<BottomSheet>(null);
 
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
-  const [selectedCurrencyIcon, setSelectedCurrencyIcon] = useState(usFlag);
-  const [selectedReceiver, setSelectedReceiver] = useState<{ name: string; phone: string; } | undefined>(undefined);
+  const currencyRef = currencyBottomSheetRef || localCurrencyRef;
+  const receiverRef = receiverBottomSheetRef || localReceiverRef;
+  const destinationCurrencyRef = destinationCurrencyBottomSheetRef || localDestinationCurrencyRef;
+
+  // Use external state if provided, otherwise use local state
+  const [localSelectedCurrency, setLocalSelectedCurrency] = useState("USD");
+  const [localSelectedCurrencyIcon, setLocalSelectedCurrencyIcon] = useState(usFlag);
+  const [localSelectedReceiver, setLocalSelectedReceiver] = useState<{ name: string; phone: string; } | undefined>(undefined);
+  const [localDestinationCurrency, setLocalDestinationCurrency] = useState("CDF");
+  const [localDestinationCurrencyIcon, setLocalDestinationCurrencyIcon] = useState(congoFlag);
+
+  const selectedCurrency = externalCurrency || localSelectedCurrency;
+  const selectedCurrencyIcon = externalCurrencyIcon || localSelectedCurrencyIcon;
+  const selectedReceiver = externalReceiver || localSelectedReceiver;
+  const destinationCurrency = externalDestinationCurrency || localDestinationCurrency;
+  const destinationCurrencyIcon = externalDestinationCurrencyIcon || localDestinationCurrencyIcon;
   const [amount, setAmount] = useState("");
+  const [destinationAmount, setDestinationAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isUpdatingFromSource, setIsUpdatingFromSource] = useState(false);
+  const [isUpdatingFromDestination, setIsUpdatingFromDestination] = useState(false);
   const [amountError, setAmountError] = useState<string>("");
   const [currencyError, setCurrencyError] = useState<string>("");
   const [receiverError, setReceiverError] = useState<string>("");
   const [generalError, setGeneralError] = useState<string>("");
 
   const handleCurrencySelect = (currency: string, icon: any) => {
-    setSelectedCurrency(currency);
-    setSelectedCurrencyIcon(icon);
+    if (onCurrencyChange) {
+      onCurrencyChange(currency, icon);
+    } else {
+      setLocalSelectedCurrency(currency);
+      setLocalSelectedCurrencyIcon(icon);
+    }
     // Clear currency error when currency is selected
     setCurrencyError("");
+
+    // Recalculate destination amount when source currency changes
+    if (amount) {
+      const rate = getExchangeRate(currency, destinationCurrency);
+      const convertedAmount = (parseFloat(amount) * rate).toFixed(2);
+      setDestinationAmount(convertedAmount);
+    }
   };
 
   const handleReceiverSelect = (receiver: { name: string; phone: string; }) => {
-    setSelectedReceiver(receiver);
+    if (onReceiverChange) {
+      onReceiverChange(receiver);
+    } else {
+      setLocalSelectedReceiver(receiver);
+    }
     // Clear receiver error when receiver is selected
     setReceiverError("");
   };
 
-  // Handle amount change with validation
+  const handleDestinationCurrencySelect = (currency: string, icon: any) => {
+    if (onDestinationCurrencyChange) {
+      onDestinationCurrencyChange(currency, icon);
+    } else {
+      setLocalDestinationCurrency(currency);
+      setLocalDestinationCurrencyIcon(icon);
+    }
+    // Recalculate destination amount when currency changes
+    if (amount) {
+      const rate = getExchangeRate(selectedCurrency, currency);
+      const convertedAmount = (parseFloat(amount) * rate).toFixed(2);
+      setDestinationAmount(convertedAmount);
+    }
+  };
+
+  // Exchange rate calculation function
+  const getExchangeRate = (fromCurrency: string, toCurrency: string): number => {
+    // Mock exchange rates - in a real app, this would come from an API
+    const rates: { [key: string]: { [key: string]: number } } = {
+      USD: {
+        CDF: 2000,
+        RWF: 1200,
+        KSH: 130,
+        UGX: 3700,
+        USD: 1
+      },
+      CDF: {
+        USD: 0.0005,
+        RWF: 0.6,
+        KSH: 0.065,
+        UGX: 1.85,
+        CDF: 1
+      },
+      RWF: {
+        USD: 0.00083,
+        CDF: 1.67,
+        KSH: 0.108,
+        UGX: 3.08,
+        RWF: 1
+      },
+      KSH: {
+        USD: 0.0077,
+        CDF: 15.38,
+        RWF: 9.23,
+        UGX: 28.46,
+        KSH: 1
+      },
+      UGX: {
+        USD: 0.00027,
+        CDF: 0.54,
+        RWF: 0.32,
+        KSH: 0.035,
+        UGX: 1
+      }
+    };
+
+    return rates[fromCurrency]?.[toCurrency] || 1;
+  };
+
+  // Get current exchange rate for display
+  const currentExchangeRate = getExchangeRate(selectedCurrency, destinationCurrency);
+
+  // Update amounts when currencies change from external props
+  useEffect(() => {
+    if (amount && !isUpdatingFromDestination) {
+      const rate = getExchangeRate(selectedCurrency, destinationCurrency);
+      const convertedAmount = (parseFloat(amount) * rate).toFixed(2);
+      setDestinationAmount(convertedAmount);
+    }
+  }, [selectedCurrency, destinationCurrency, amount, isUpdatingFromDestination]);
+
+  // Handle source amount change with validation
   const handleAmountChange = (text: string) => {
+    if (isUpdatingFromDestination) return; // Prevent circular updates
+
     setAmount(text);
+    setIsUpdatingFromSource(true);
+
+    // Calculate destination amount
+    if (text && !isNaN(parseFloat(text))) {
+      const rate = getExchangeRate(selectedCurrency, destinationCurrency);
+      const convertedAmount = (parseFloat(text) * rate).toFixed(2);
+      setDestinationAmount(convertedAmount);
+    } else {
+      setDestinationAmount("");
+    }
+
     // Clear amount error when user starts typing
     if (amountError) {
       setAmountError("");
@@ -55,6 +197,36 @@ export default function SendMoneyForm({ onComplete, onCancel }: SendMoneyFormPro
     if (generalError) {
       setGeneralError("");
     }
+
+    setTimeout(() => setIsUpdatingFromSource(false), 100);
+  };
+
+  // Handle destination amount change
+  const handleDestinationAmountChange = (text: string) => {
+    if (isUpdatingFromSource) return; // Prevent circular updates
+
+    setDestinationAmount(text);
+    setIsUpdatingFromDestination(true);
+
+    // Calculate source amount (reverse conversion)
+    if (text && !isNaN(parseFloat(text))) {
+      const rate = getExchangeRate(destinationCurrency, selectedCurrency);
+      const convertedAmount = (parseFloat(text) * rate).toFixed(2);
+      setAmount(convertedAmount);
+    } else {
+      setAmount("");
+    }
+
+    // Clear amount error when user starts typing
+    if (amountError) {
+      setAmountError("");
+    }
+    // Clear general error when user makes changes
+    if (generalError) {
+      setGeneralError("");
+    }
+
+    setTimeout(() => setIsUpdatingFromDestination(false), 100);
   };
 
   // Validate all inputs
@@ -127,7 +299,7 @@ export default function SendMoneyForm({ onComplete, onCancel }: SendMoneyFormPro
         <AmountInput
           currency={selectedCurrency}
           icon={selectedCurrencyIcon}
-          onCurrencyPress={() => currencyBottomSheetRef.current?.expand()}
+          onCurrencyPress={() => currencyRef.current?.expand()}
           value={amount}
           onChangeText={handleAmountChange}
           placeholder="0.00"
@@ -154,14 +326,23 @@ export default function SendMoneyForm({ onComplete, onCancel }: SendMoneyFormPro
               size={16}
               color={Colors.primary.red}
             />
-            <Text style={styles.feeText}>1 USD = 2000 CDF</Text>
+            <Text style={styles.feeText}>
+              1 {selectedCurrency} = {currentExchangeRate.toLocaleString()} {destinationCurrency}
+            </Text>
           </View>
         </View>
 
-        <AmountInput currency="CDF" icon={congoFlag} />
+        <AmountInput
+          currency={destinationCurrency}
+          icon={destinationCurrencyIcon}
+          onCurrencyPress={() => destinationCurrencyRef.current?.expand()}
+          value={destinationAmount}
+          onChangeText={handleDestinationAmountChange}
+          placeholder="0.00"
+        />
 
         <ReceiverSelectButton
-          onPress={() => receiverBottomSheetRef.current?.expand()}
+          onPress={() => receiverRef.current?.expand()}
           selectedReceiver={selectedReceiver}
         />
 
@@ -189,16 +370,29 @@ export default function SendMoneyForm({ onComplete, onCancel }: SendMoneyFormPro
         />
       </View>
 
-      <CurrencyBottomSheet
-        ref={currencyBottomSheetRef}
-        onSelectCurrency={handleCurrencySelect}
-        selectedCurrency={selectedCurrency}
-      />
+      {/* Render bottom sheets only if no external refs provided (for standalone usage) */}
+      {!currencyBottomSheetRef && (
+        <CurrencyBottomSheet
+          ref={localCurrencyRef}
+          onSelectCurrency={handleCurrencySelect}
+          selectedCurrency={selectedCurrency}
+        />
+      )}
 
-      <ReceiverBottomSheet
-        ref={receiverBottomSheetRef}
-        onSelectReceiver={handleReceiverSelect}
-      />
+      {!receiverBottomSheetRef && (
+        <ReceiverBottomSheet
+          ref={localReceiverRef}
+          onSelectReceiver={handleReceiverSelect}
+        />
+      )}
+
+      {!destinationCurrencyBottomSheetRef && (
+        <CurrencyBottomSheet
+          ref={localDestinationCurrencyRef}
+          onSelectCurrency={handleDestinationCurrencySelect}
+          selectedCurrency={destinationCurrency}
+        />
+      )}
     </>
   );
 }

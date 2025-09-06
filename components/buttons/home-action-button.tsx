@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "ClashDisplayMedium",
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.text.primary,
     textAlign: "center",
   },

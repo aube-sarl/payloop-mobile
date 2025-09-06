@@ -5,15 +5,19 @@ import {
   ugadanFlag,
   usFlag,
 } from "@/assets/icons/_icons";
+import CurrencyBottomSheet from "@/components/bottom-sheets/currency-bottom-sheet";
+import ReceiverBottomSheet from "@/components/bottom-sheets/receiver-bottom-sheet";
 import CurrencyButton from "@/components/buttons/currency-button";
 import HomeActionButton from "@/components/buttons/home-action-button";
 import CreditCard from "@/components/cards/credit-card";
 import SendMoneyForm from "@/components/forms/send-money-form";
 import { Colors } from "@/constants/Colors";
+import { Feather } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -27,6 +31,22 @@ export default function HomeScreen() {
   const router = useRouter();
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [balanceVisible, setBalanceVisible] = useState(true);
+
+  // Bottom sheet refs for the SendMoneyForm
+  const currencyBottomSheetRef = useRef<BottomSheet>(null);
+  const receiverBottomSheetRef = useRef<BottomSheet>(null);
+
+  // State for SendMoneyForm currency selection
+  const [sendFormCurrency, setSendFormCurrency] = useState("USD");
+  const [sendFormCurrencyIcon, setSendFormCurrencyIcon] = useState(usFlag);
+  const [sendFormReceiver, setSendFormReceiver] = useState<{ name: string; phone: string; } | undefined>(undefined);
+
+  // State for second currency input (destination currency)
+  const [destinationCurrency, setDestinationCurrency] = useState("CDF");
+  const [destinationCurrencyIcon, setDestinationCurrencyIcon] = useState(congoFlag);
+
+  // Additional bottom sheet ref for destination currency
+  const destinationCurrencyBottomSheetRef = useRef<BottomSheet>(null);
 
   // Navigation handler functions
   const handleDeposit = () => {
@@ -157,13 +177,35 @@ export default function HomeScreen() {
             <HomeActionButton
               text="Envoyer"
               onPress={handleSendMoney}
-              icon={<AntDesign name="arrowup" size={24} color={"white"} />}
+              icon={
+                <Feather name="send" size={24} color="white" />
+              }
             />
           </View>
         </View>
 
         {/* Send Money Form */}
-        <SendMoneyForm />
+        <SendMoneyForm
+          currencyBottomSheetRef={currencyBottomSheetRef}
+          receiverBottomSheetRef={receiverBottomSheetRef}
+          destinationCurrencyBottomSheetRef={destinationCurrencyBottomSheetRef}
+          externalCurrency={sendFormCurrency}
+          externalCurrencyIcon={sendFormCurrencyIcon}
+          externalReceiver={sendFormReceiver}
+          externalDestinationCurrency={destinationCurrency}
+          externalDestinationCurrencyIcon={destinationCurrencyIcon}
+          onCurrencyChange={(currency: string, icon: any) => {
+            setSendFormCurrency(currency);
+            setSendFormCurrencyIcon(icon);
+          }}
+          onReceiverChange={(receiver: { name: string; phone: string; }) => {
+            setSendFormReceiver(receiver);
+          }}
+          onDestinationCurrencyChange={(currency: string, icon: any) => {
+            setDestinationCurrency(currency);
+            setDestinationCurrencyIcon(icon);
+          }}
+        />
 
         {/* Credit Cards Section */}
         <View style={styles.cardsSection}>
@@ -171,6 +213,33 @@ export default function HomeScreen() {
           <CreditCard />
         </View>
       </ScrollView>
+
+      {/* Bottom Sheets - Rendered outside ScrollView to stay fixed */}
+      <CurrencyBottomSheet
+        ref={currencyBottomSheetRef}
+        onSelectCurrency={(currency: string, icon: any) => {
+          setSendFormCurrency(currency);
+          setSendFormCurrencyIcon(icon);
+        }}
+        selectedCurrency={sendFormCurrency}
+      />
+
+      <ReceiverBottomSheet
+        ref={receiverBottomSheetRef}
+        onSelectReceiver={(receiver: any) => {
+          setSendFormReceiver(receiver);
+        }}
+      />
+
+      {/* Destination Currency Bottom Sheet */}
+      <CurrencyBottomSheet
+        ref={destinationCurrencyBottomSheetRef}
+        onSelectCurrency={(currency: string, icon: any) => {
+          setDestinationCurrency(currency);
+          setDestinationCurrencyIcon(icon);
+        }}
+        selectedCurrency={destinationCurrency}
+      />
     </SafeAreaView>
   );
 }

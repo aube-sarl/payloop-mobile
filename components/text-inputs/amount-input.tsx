@@ -19,6 +19,7 @@ export default function AmountInput(props: {
   onChangeText?: (text: string) => void;
   placeholder?: string;
   hasError?: boolean;
+  editable?: boolean;
 }) {
   const [amount, setAmount] = useState(props.value || "");
 
@@ -37,7 +38,7 @@ export default function AmountInput(props: {
   return (
     <View style={[styles.container, props.hasError && styles.errorContainer]}>
       <TextInput
-        style={styles.textInput}
+        style={[styles.textInput]}
         inputMode="decimal"
         placeholder={props.placeholder || "0.00"}
         placeholderTextColor={Colors.text.light}
@@ -45,6 +46,7 @@ export default function AmountInput(props: {
         onChangeText={handleAmountChange}
         keyboardType="decimal-pad"
         returnKeyType="done"
+        editable={props.editable !== false}
       />
       <TouchableOpacity
         style={styles.currencyButton}
