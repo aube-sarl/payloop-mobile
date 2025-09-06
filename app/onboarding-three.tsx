@@ -21,7 +21,7 @@ export default function OnboardingThree() {
                 <View style={styles.footer}>
                     <RoundedButton
                         text="Commencer"
-                        onPress={() => router.push("/(tabs)")}
+                        onPress={() => router.push("/auth-login")}
                     />
                 </View>
             </View>
