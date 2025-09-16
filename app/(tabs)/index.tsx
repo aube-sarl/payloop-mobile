@@ -12,7 +12,7 @@ import HomeActionButton from "@/components/buttons/home-action-button";
 import CreditCard from "@/components/cards/credit-card";
 import SendMoneyForm from "@/components/forms/send-money-form";
 import { Colors } from "@/constants/Colors";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -39,11 +39,14 @@ export default function HomeScreen() {
   // State for SendMoneyForm currency selection
   const [sendFormCurrency, setSendFormCurrency] = useState("USD");
   const [sendFormCurrencyIcon, setSendFormCurrencyIcon] = useState(usFlag);
-  const [sendFormReceiver, setSendFormReceiver] = useState<{ name: string; phone: string; } | undefined>(undefined);
+  const [sendFormReceiver, setSendFormReceiver] = useState<
+    { name: string; phone: string } | undefined
+  >(undefined);
 
   // State for second currency input (destination currency)
   const [destinationCurrency, setDestinationCurrency] = useState("CDF");
-  const [destinationCurrencyIcon, setDestinationCurrencyIcon] = useState(congoFlag);
+  const [destinationCurrencyIcon, setDestinationCurrencyIcon] =
+    useState(congoFlag);
 
   // Additional bottom sheet ref for destination currency
   const destinationCurrencyBottomSheetRef = useRef<BottomSheet>(null);
@@ -103,7 +106,11 @@ export default function HomeScreen() {
             <Text style={styles.userName}>John Doe</Text>
           </View>
           <TouchableOpacity style={styles.notificationButton}>
-            <AntDesign name="bells" size={24} color={Colors.text.primary} />
+            <Ionicons
+              name="notifications-outline"
+              size={24}
+              color={Colors.text.primary}
+            />
           </TouchableOpacity>
         </View>
 
@@ -132,12 +139,12 @@ export default function HomeScreen() {
             {selectedCurrency === "USD"
               ? "US Dollars"
               : selectedCurrency === "CDF"
-                ? "Francs Congolais"
-                : selectedCurrency === "RWF"
-                  ? "Francs Rwandais"
-                  : selectedCurrency === "KSH"
-                    ? "Shillings Kenyans"
-                    : "Shillings Ougandais"}
+              ? "Francs Congolais"
+              : selectedCurrency === "RWF"
+              ? "Francs Rwandais"
+              : selectedCurrency === "KSH"
+              ? "Shillings Kenyans"
+              : "Shillings Ougandais"}
           </Text>
           <View style={styles.balanceRow}>
             <Text style={styles.balance}>
@@ -177,9 +184,7 @@ export default function HomeScreen() {
             <HomeActionButton
               text="Envoyer"
               onPress={handleSendMoney}
-              icon={
-                <Feather name="send" size={24} color="white" />
-              }
+              icon={<Feather name="send" size={24} color="white" />}
             />
           </View>
         </View>
@@ -198,7 +203,7 @@ export default function HomeScreen() {
             setSendFormCurrency(currency);
             setSendFormCurrencyIcon(icon);
           }}
-          onReceiverChange={(receiver: { name: string; phone: string; }) => {
+          onReceiverChange={(receiver: { name: string; phone: string }) => {
             setSendFormReceiver(receiver);
           }}
           onDestinationCurrencyChange={(currency: string, icon: any) => {
@@ -323,7 +328,7 @@ const styles = StyleSheet.create({
   actionRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10
+    marginTop: 10,
   },
   cardsSection: {
     paddingHorizontal: 4,
